@@ -1,13 +1,11 @@
 __author__ = 'jtakwani'
 
-import os
 import numpy as np
-import random
 import pandas as pd
 import math
 from operator import add
-from sklearn.svm import LinearSVC
-
+from sklearn import svm
+from sklearn.metrics import accuracy_score
 
 def Smo(data, classLabel, TestData, TestLabel, constant, tolerance, maxIterations):
     dataMatrix = np.array(data)
@@ -146,7 +144,7 @@ def calculateAccurace(dataMatrix,label,alpha,weight,bias):
             result.append(-1)
         if result[i] == label[i]:
             count += 1
-    print (count * 100 /len(label))
+    print "Accuracy of Smo: " + str((count * 100 /len(label)))
 
 def convert(labels):
     for i in range(1,len(labels)+1):
@@ -155,18 +153,49 @@ def convert(labels):
         else:
             labels.ix[i] = 1
     return labels
+
+def linearAndRbfSvmUsingLib(Data,Class,TestData,TestLabel):
+    clf = svm.SVC(kernel='linear')
+    clf.fit(Data,Class)
+    pred = clf.predict(TestData)
+    labels = np.array(TestLabel)
+    count = 0
+    rbf = svm.SVC(kernel='rbf')
+    rbf.fit(Data,Class)
+    rbfPred = rbf.predict(TestData)
+
+    print "Accuracy of Linear Svm: " + str(accuracy_score(labels,pred) *100)
+    print "Accuracy of Gaussian Kernel: " + str(accuracy_score(labels,rbfPred)*100)
+
+def polynomialSvmUsingLib(TrainData,TestData,TrainLabel,TestLabel):
+    clf = svm.SVC(kernel='poly')
+    clf.fit(TrainData, TrainLabel)
+    pred = clf.predict(TestData)
+    labels = np.array(TestLabel)
+    print "Accuracy of Polynomial Kernel: " + str(accuracy_score(labels, pred)*100)
+
 def main():
 
-    dataFrame = pd.read_csv('../Data/a2DataSet/digits/train.csv')
-    testdataFrame = pd.read_csv('../Data/a2DataSet/digits/test.csv')
+    print "It will take about 10 to 15 minutes to run all kernel so please wait, Sorry for inconvenience"
+
+    dataFrame = pd.read_csv('digits/train.csv')
+    testdataFrame = pd.read_csv('digits/test.csv')
+
     Data = dataFrame.iloc[1:2000, 1:]
     TestData = testdataFrame.iloc[1:, 1:]
+
+
     TestLabel = convert(testdataFrame.iloc[1:,0])
     Class = convert(dataFrame.iloc[1:2000, 0])
+
+    polynomialSvmUsingLib(Data,TestData,Class,TestLabel)
+
     Data = normalizeData(Data)
     TestData = normalizeData(TestData)
+
     #print Data
     Smo(Data, Class, TestData, TestLabel, 0.01, 0.5, 5)
+    linearAndRbfSvmUsingLib(Data,Class,TestData,TestLabel)
 
 
 if __name__ == "__main__":

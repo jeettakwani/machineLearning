@@ -75,7 +75,7 @@ def convertToCsv(input_file, output_file, columnsNeeded):
 def main():
 
     input_file = '../dataset/business.json'
-    output_file = 'business.csv'
+    output_file = '../csv/business.csv'
 
     columnsNeeded = ['attributes','business_id','categories','name','open','stars']
 

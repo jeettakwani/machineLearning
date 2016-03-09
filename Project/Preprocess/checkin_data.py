@@ -21,8 +21,6 @@ def convertToCsv(input_file, output_file, columnsNeeded,idColumn):
         for line in json_file:
             count += 1
             data.append(json.loads(line))
-            if count == 50000:
-                break
 
     with open(output_file, 'wb') as csv_file:
         writer = csv.writer(csv_file)
@@ -88,11 +86,11 @@ def processInfo(items):
 def main():
 
     input_file = '../dataset/checkin.json'
-    output_file = 'checkin.csv'
+    output_file = '../csv/checkin.csv'
 
     columnsNeeded = ['business_id','checkin_info']
 
-    business_data = pd.read_csv('business.csv')
+    business_data = pd.read_csv('../csv/business.csv')
 
     idColumn = list(business_data['business_id'])
 

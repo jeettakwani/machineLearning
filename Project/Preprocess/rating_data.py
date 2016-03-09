@@ -23,8 +23,6 @@ def convertToCsv(input_file, output_file, columnsNeeded,idColumn):
         for line in json_file:
             count += 1
             data.append(json.loads(line))
-            if count == 50000:
-                break
 
     with open(output_file, 'wb') as csv_file:
         writer = csv.writer(csv_file)
@@ -86,11 +84,11 @@ def convertToCsv(input_file, output_file, columnsNeeded,idColumn):
 def main():
 
     input_file = '../dataset/review.json'
-    output_file = 'review.csv'
+    output_file = '../csv/review.csv'
 
     columnsNeeded = ['business_id','date','stars']
 
-    business_data = pd.read_csv('business.csv')
+    business_data = pd.read_csv('../csv/business.csv')
 
     idColumn = list(business_data['business_id'])
 

@@ -71,7 +71,8 @@ sns.barplot(x=y,y=total_checkins_nightlife,ax=axis4)
 sns.plt.title("checkin_count_nightlife")
 
 month=[1,2,3,4,5,6,7,8,9,10,11,12]
-nightlife_ratings_mean = review_data_nightlife.groupby('month')["stars"]
+nightlife_ratings_mean = review_data_nightlife.groupby(['year','month'])['stars'].count().reset_index(name='count')
+#DataFrame({'count' : review_data_nightlife.groupby( [ "Name", "City"] ).size()}).reset_index()
 
 print nightlife_ratings_mean
 year=[2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015]
@@ -81,10 +82,15 @@ fig,(axis5) = plt.subplots(1,1,figsize=(15,4))
 #sns.plt.title('Nightlife_ratings_mean')
 
 fig,(axis6) = plt.subplots(1,1,figsize=(15,4))
-sns.countplot(x='year',order=year,hue='month', hue_order=month, data=review_data_nightlife,palette="hls",ax=axis6)
-sns.plt.title('year_review_count_nightlife')
+#axis6.set_xticks(np.arrange(2005,2015,12))
+#axis6.plot()
+axis6 = nightlife_ratings_mean.plot(legend=True,figsize=(15,4),marker='o')
+axis6.set_xticks(year)
+axis6.set_xticklabels(nightlife_ratings_mean.index.tolist(), rotation=90)
 
-nalysis
+#sns.countplot(x='dayOfWeek',order=y, data=review_data_restaurant,palette="hls",ax=axis6)
+#sns.plt.title('week_review_count_restaurant')
+
 
 '''
 # Date
@@ -334,4 +340,4 @@ if y >= 2013 and y == y and m == m:
 
 
 
-#plt.show()
+plt.show()

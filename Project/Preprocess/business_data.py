@@ -5,8 +5,7 @@ from types import *
 import json
 import csv
 
-def convertToCsv(input_file, output_file, columnsNeeded):
-
+def convertToCsv(input_file, output_file, columnsNeeded,f):
 
     json_data = []
     data = None
@@ -19,14 +18,13 @@ def convertToCsv(input_file, output_file, columnsNeeded):
         for line in json_file:
             data.append(json.loads(line))
 
-
     with open(output_file, 'wb') as csv_file:
         writer = csv.writer(csv_file)
 
         for item in data:
-            counter += 1
             item_values = []
             flag = 0
+            counter +=1
             for key in item:
                 if write_header:
                     if key not in columnsNeeded:
@@ -38,14 +36,17 @@ def convertToCsv(input_file, output_file, columnsNeeded):
 
                 if key == 'categories':
 
-                    if 'restaurant' in item[key] \
+                    if 'nightlife' in str(item[key]).lower()\
+                            or 'bar' in str(item[key]).lower()\
+                            or 'bars' in str(item[key]).lower()\
+                            or 'pub' in str(item[key]).lower():
+
+                        value = 'nightlife'
+
+                    elif 'restaurant' in item[key] \
                             or 'Restaurants' in item[key]:
 
                         value = 'restaurant'
-
-                    elif 'nightlife' in str(item[key]).lower():
-
-                        value = 'nightlife'
 
                     else:
                         flag = 1
@@ -63,22 +64,32 @@ def convertToCsv(input_file, output_file, columnsNeeded):
                 writer.writerow(item_keys)
                 write_header = False
 
-            if not flag:
+            if not flag and f =='train' and count != 5000:
                 writer.writerow(item_values)
                 count +=1
-                #print count
-                if count == 5001:
-                    break
 
+            elif not flag and f == 'test' and count < 5000 :
+                count +=1
+                print counter
+            elif not flag and f == 'test' and count != 7001:
+                writer.writerow(item_values)
+                count +=1
+
+
+            else:
+
+                continue
 
 
 def main():
 
     input_file = '../dataset/business.json'
-    output_file = '../csv/business.csv'
+    train_file = '../csv/train_business.csv'
+    test_file = '../csv/test_business.csv'
 
     columnsNeeded = ['attributes','business_id','categories','name','open','stars']
 
-    convertToCsv(input_file,output_file,columnsNeeded)
+    convertToCsv(input_file,train_file,columnsNeeded,'train')
+    convertToCsv(input_file,test_file,columnsNeeded,'test')
 if __name__ == "__main__":
     main()

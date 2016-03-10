@@ -7,7 +7,7 @@ import csv
 import pandas as pd
 from datetime import datetime
 
-def convertToCsv(input_file, output_file, columnsNeeded,idColumn):
+def convertToCsv(input_file, output_file,columnsNeeded,idColumn):
 
 
     json_data = []
@@ -27,7 +27,6 @@ def convertToCsv(input_file, output_file, columnsNeeded,idColumn):
 
         for item in data:
             item_values = []
-            flag = 0
             if item['business_id'] not in idColumn:
                 counter +=1
                 continue
@@ -86,15 +85,20 @@ def processInfo(items):
 def main():
 
     input_file = '../dataset/checkin.json'
-    output_file = '../csv/checkin.csv'
+    train_file = '../csv/train_checkin.csv'
+    test_file = '../csv/test_checkin.csv'
 
     columnsNeeded = ['business_id','checkin_info']
 
-    business_data = pd.read_csv('../csv/business.csv')
+    train_business_data = pd.read_csv('../csv/train_business.csv')
+    test_business_data = pd.read_csv('../csv/test_business.csv')
 
-    idColumn = list(business_data['business_id'])
+    trainIdColumn = list(train_business_data['business_id'])
+    testIdColumn = list(test_business_data['business_id'])
 
-    convertToCsv(input_file,output_file,columnsNeeded,idColumn)
+    convertToCsv(input_file,train_file,columnsNeeded,trainIdColumn)
+    convertToCsv(input_file,test_file,columnsNeeded,testIdColumn)
+
 
 if __name__ == "__main__":
     main()

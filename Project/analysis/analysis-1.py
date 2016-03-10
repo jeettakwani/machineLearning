@@ -10,13 +10,13 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set_style('whitegrid')
 
-business = pd.read_csv("../csv/business.csv")
-review = pd.read_csv("../csv/review.csv",parse_dates=['date'],low_memory=False)
-checkin  = pd.read_csv("../csv/checkin.csv")
+business = pd.read_csv("../csv/train_business.csv")
+review = pd.read_csv("../csv/train_review.csv",parse_dates=['date'],low_memory=False)
+checkin  = pd.read_csv("../csv/train_checkin.csv")
 
 #train.head(10)
-
 #print train.head(10)
+
 fig, (axis1) = plt.subplots(1,1,figsize=(15,4))
 business_data_restaurant = business[business['categories'] == 'restaurant']['business_id']
 
@@ -41,7 +41,6 @@ sns.countplot(x='month',order=[1,2,3,4,5,6,7,8,9,10,11,12],hue='dayOfWeek', hue_
 sns.plt.title('Nightlife_review_count')
 
 checkin_data_restaurant =  checkin.loc[checkin['business_id'].isin(list(business_data_restaurant))]
-
 checkin_data_nightlife =  checkin.loc[checkin['business_id'].isin(list(business_data_nightlife))]
 
 
@@ -71,8 +70,23 @@ fig,(axis4) = plt.subplots(1,1,figsize=(15,4))
 sns.barplot(x=y,y=total_checkins_nightlife,ax=axis4)
 sns.plt.title("checkin_count_nightlife")
 
+month=[1,2,3,4,5,6,7,8,9,10,11,12]
+nightlife_ratings_mean = review_data_nightlife.groupby('month')["stars"]
 
-''''
+print nightlife_ratings_mean
+year=[2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015]
+
+fig,(axis5) = plt.subplots(1,1,figsize=(15,4))
+#sns.barplot(x=y,y=nightlife_ratings_mean,ax=axis5)
+#sns.plt.title('Nightlife_ratings_mean')
+
+fig,(axis6) = plt.subplots(1,1,figsize=(15,4))
+sns.countplot(x='year',order=year,hue='month', hue_order=month, data=review_data_nightlife,palette="hls",ax=axis6)
+sns.plt.title('year_review_count_nightlife')
+
+nalysis
+
+'''
 # Date
 
 # Create Year and Month columns
@@ -320,4 +334,4 @@ if y >= 2013 and y == y and m == m:
 
 
 
-plt.show()
+#plt.show()

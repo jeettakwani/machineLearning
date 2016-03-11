@@ -14,6 +14,8 @@ business = pd.read_csv("../csv/train_business.csv")
 review = pd.read_csv("../csv/train_review.csv",parse_dates=['date'],low_memory=False)
 checkin  = pd.read_csv("../csv/train_checkin.csv")
 
+dates = pd.date_range('2005-03-14', '2015-12-31')
+
 #train.head(10)
 #print train.head(10)
 
